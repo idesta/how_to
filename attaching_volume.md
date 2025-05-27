@@ -147,7 +147,7 @@
 
     - you can create another text file. type **touch another.txt**
 
-* **Reboot the EC2 Instance server and check the text files are existed or not inside the mount point path (/mnt/data) after accessing the server again.**
+* **Reboot the EC2 Instance and check the text files are existed or not inside the mount point path (/mnt/data) after accessing the server again.**
 
 
 
