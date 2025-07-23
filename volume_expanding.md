@@ -1,7 +1,7 @@
 # Expanding Linux Server Disk Volume
 
 ```
-This is debian based disk expanding procudere. You may exclude the SWAP Partition configuration
+This is debian based disk expanding procudere. You may exclude the SWAP Partition configuration if you want to configure other non-swap linux partitions
 ```
 
 ## Move Swap space to make space for root partition
