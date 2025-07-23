@@ -9,7 +9,7 @@ Miscellaneous 'how to' procedures
 ```
 known_hosts  known_hosts.old
 ```
-> ergaw@israel-vostro3520:~/.ssh$ ssh-keygen -o
+> zergaw@israel-vostro3520:~/.ssh$ ssh-keygen -o
 
 ```
 Generating public/private ed25519 key pair.
