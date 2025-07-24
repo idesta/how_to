@@ -17,7 +17,14 @@ is layout of the disk.
     - /dev/sda5 ----------------> Type (Swap)
 
 ```
-For example the size of the disk /dev/sda is 200 GiB (after extending). The three partitions use the first sectors only. If we expand the root partition (/dev/sda1) it will overlap with the unused partition /devsda2 and swap partition /dev/sda5. So we have to move the swap partition elsewhere; either use swapfile or create another partition.
+For example the size of the disk /dev/sda is 200 GiB (after extending).  
+
+The three partitions use the first sectors only. If we expand the root partition (/dev/sda1);  
+
+it will overlap with the unused partition /devsda2 and swap partition /dev/sda5.  
+
+So we have to move the swap partition elsewhere; either use swapfile or create another partition.  
+
 ```
 
 - **Steps to create a separate partition at the end of the disk without changing the size**
