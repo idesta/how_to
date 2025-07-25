@@ -1,6 +1,6 @@
 # Expanding Linux Server Disk Volume
 
-```
+```plaintext
 This is debian based disk expanding procudere. You may exclude the SWAP Partition configuration if you want to configure other non-swap linux partitions
 ```
 
@@ -16,7 +16,7 @@ is layout of the disk.
     - /dev/sda2 ----------------> Type (Extended)
     - /dev/sda5 ----------------> Type (Swap)
 
-```
+```plaintext
 For example the size of the disk /dev/sda is 200 GiB (after extending).  
 
 The three partitions use the first sectors only. If we expand the root partition (/dev/sda1);  
@@ -50,7 +50,7 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
 - > sudo nano /etc/fstab
 
-    - comment out the swap UUID entry. (add '#' in front of the UUID entry of swap file system table)
+    - comment out the swap UUID entry. (add `#` in front of the UUID entry of swap file system table)
 
 - **Check the swap partition is disabled**
 
@@ -98,7 +98,7 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
 #### 2.2 Expand/resize the root partition
 
-- **Extend /dev/sda1:** To do this online while your server is running, we will use 'parted:'
+- **Extend /dev/sda1:** To do this online while your server is running, we will use `parted`
 
 - > sudo parted /dev/sda
 
@@ -110,9 +110,9 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
     - End? [n GB]? 200GB
 
-        - n - is current partition size
+        - `n` - is current partition size
 
-        - 200GB - is total size of partition after extending.
+        - `200GB` - is total size of partition after extending.
 
     - (parted) quit
 
@@ -146,7 +146,7 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
     - Partition number (2-4, default 2): 2
 
-    - Hit 'Enter' for default values
+    - Hit `Enter` for default values
 
     - command (m for help): w
 
@@ -158,7 +158,7 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
     - command (m for help): n
 
-    - Hit 'Enter' for default values
+    - Hit `Enter` for default values
 
     - **Change the partition type:**
 
@@ -182,7 +182,7 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
 - > sudo mkswap /dev/sda5
 
-    - If this command gives you an error (no such file or directory) -> 'REBOOT' the server.
+    - If this command gives you an error (no such file or directory) -> `REBOOT` the server.
 
     - execute the command again after rebooting
 
@@ -198,11 +198,11 @@ So we have to move the swap partition elsewhere; either use swapfile or create a
 
     - > sudo blkid
 
-        - Observe and 'COPY' the UUID of /dev/sda5
+        - Observe and `COPY` the UUID of /dev/sda5
 
-        - Open the fstab (sudo nano /etc/fstab) and 'PASTE' the UUID on the swap entry.
+        - Open the fstab (sudo nano /etc/fstab) and `PASTE` the UUID on the swap entry.
 
-        - 'UNCOMMENT' the swap entry and 'SAVE' and 'EXIT' the fstab
+        - `UNCOMMENT` the swap entry and `SAVE` and `EXIT` the fstab
 
         - **Verify the fstab configuration**
 
