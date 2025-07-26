@@ -183,7 +183,7 @@ Within the sshd_config file, look for the line that specifies the port SSH liste
     sudo systemctl restart ssh.service
     ```
 
-- **Update Firewall Rules (if applicable):**
+- **Update Firewall Rules (Or you can consider Security Group here.):**
 
     - 
     ```plaintext
