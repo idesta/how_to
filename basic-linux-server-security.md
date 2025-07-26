@@ -287,3 +287,73 @@ Consider enabling email notifications from fail2ban to alert you about blocked I
 ```
 
  ### 6. IP TABLES
+
+ - 
+ ```plaintext Protecting your cloud server using IP tables is a great way to enhance security. IP tables is a user-space utility program that allows you to configure the firewall (netfilter) provided by the Linux kernel. Here's a basic guide to setting up IP tables to allow access only from your IP and to block/reject malicious Ips.
+ ```
+
+ - Before any package installation updating/upgrading your server is highly recommended.
+
+ - 
+ ```bash
+ sudo apt install iptables-persistent
+ ```
+
+ -  Before configuring IP table setup in your cloud server you have to know your trusted IP address.(it might be your public ip)
+
+ - To `allow` your trusted IP address, if you are using a `standard ssh port`:
+    - 
+    ```bash
+    sudo iptables -A INPUT -p tcp --dport 22 -s your_ip -j ACCEPT
+    ```
+
+ - To `allow` your trusted IP address, if you are using a `non-standard ssh port`:
+    - 
+    ```bash
+    sudo iptables -A INPUT -p tcp --dport 9759 -s your_ip -j ACCEPT
+    ```
+
+ - To `reject` a suspicious IP address, if you are using a `standard ssh por`t`:
+    - 
+    ```bash
+    sudo iptables -A INPUT -p tcp --dport 22 -s suspicious_ip -j DROP
+    ```
+
+ - To `allow` a suspicious IP address, if you are using a `non-standard ssh port`:
+    - 
+    ```bash
+    sudo iptables -A INPUT -p tcp --dport 9759 -s suspicious_ip -j DROP
+    ```
+
+ - Once you've added the rules, **save them to persist across reboots:**
+
+    ```bash
+    sudo iptables-save | sudo tee /etc/iptables/rules.v4
+    ```
+
+    ```plaintext
+    This will save the rules to /etc/iptables/rules.v4, which iptables-persistent will load automatically on boot. Make sure that you have added your current IP address to the trusted list before applying them. Otherwise, you may lock yourself out of SSH access.
+    ```
+ - Apply the IP tables rules
+
+    - 
+    ```bash
+    sudo iptables-save 
+    ```
+    - check the IP tables rule
+
+    ```bash
+    sudo iptables -L
+    ```
+
+```plaintext
+Finally we recommend that to continuously monitor your server's logs for suspicious activity, such as repeated failed login attempts or unusual access patterns. Promptly investigate and take action against any suspicious activity. Keep your cloud server updated with the latest security patches and software updates. Enable automatic updates to ensure critical patches are applied promptly, minimizing vulnerabilities. By implementing these security measures, you can significantly enhance the protection of your cloud server and minimize the risk of unauthorized access or compromise. Remember to stay vigilant and proactive in monitoring and updating your server's security measures to adapt to evolving threats.
+```
+
+```plaintext
+Keep your cloud server updated with the latest security patches and software updates. Enable automatic updates to ensure critical patches are applied promptly, minimizing vulnerabilities. By implementing these security measures, you can significantly enhance the protection of your cloud server and minimize the risk of unauthorized access or compromise. Remember to stay vigilant and proactive in monitoring and updating your server's security measures to adapt to evolving threats.
+```
+
+```plaintext
+By implementing these security measures, you can significantly enhance the protection of your cloud server and minimize the risk of unauthorized access or compromise. Remember to stay vigilant and proactive in monitoring and updating your server's security measures to adapt to evolving threats.
+```
