@@ -107,7 +107,7 @@ server.
 
         - **IN YOUR CLOUD SERVER**
 
-        - Disable Password Authentication
+        - **Disable Password Authentication**
 
             - 
             ```plaintext
@@ -124,6 +124,166 @@ server.
             ```
             - Change `#PasswordAuthentication yes` to `PasswordAuthentication no`
 
-        - Enable Public key Authentication
+        - **Enable Public key Authentication**
 
             - 
+            ```plaintext
+            Find the line PubkeyAuthentication and set its value to yes. If the line is commented out, uncomment it and set the value to yes.
+            ```
+            - change `#PubkeyAuthentication yes` to `PubkeyAuthentication yes`
+
+            - Save the file and exit the text editor.
+
+            - After making changes to the SSH configuration, restart the SSH service to apply the changes:
+
+                - 
+                ```bash
+                sudo systemctl restart ssh.service
+                ```
+        - 
+        ```plaintext
+        Test SSH login again to ensure that password authentication is disabled and only SSH key authentication is allowed. Once these steps are completed, SSH key authentication will be enforced, and password authentication will be disabled on your Ubuntu Server. This significantly enhances the security of your SSH service.
+        ```
+
+### 4. Configure SSH to use a non-standard port
+
+- 
+```plaintext
+By default, SSH operates on port 22; changing the default SSH port can help reduce the number of automated attacks targeting your cloud server. However, this should not be your only security measure as determined attackers can still find the SSH port.
+```
+- Open a terminal on your cloud server and edit the SSH configuration file.
+
+```bash
+sudo nano /etc/ssh/sshd_config
+```
+
+- Locate the Port Configuration:
+```plaintext
+Within the sshd_config file, look for the line that specifies the port SSH listens on. By default, it is usually set to Port 22.
+```
+
+```plaintext
+#Port 22
+#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+```
+- You'll need to change this to your desired non-standard port, such as: `9759`
+
+- NB: you can set any port number.
+
+- change `#Port 22` to `Port 9759`
+
+- After making the change, save the file and exit the text editor.
+
+- To apply the changes, restart the SSH service by executing the following command:
+
+    - 
+    ```bash
+    sudo systemctl restart ssh.service
+    ```
+
+- **Update Firewall Rules (if applicable):**
+
+    - 
+    ```plaintext
+    If you have a firewall enabled on your cloud server, such as UFW (Uncomplicated Firewall), you'll need to allow traffic on the new SSH port. For example, if you're using UFW, you can allow traffic on port 9759 by running:
+    ```
+
+    - 
+    ```bash
+    sudo ufw enable
+    sudo ufw allow 9759/tcp
+    sudo ufw status
+    ```
+
+    - 
+    ```plaintext
+    After restarting the SSH service and updating firewall rules (if necessary), test SSH connectivity by attempting to connect to your cloud server from your local machine using the new port.
+    ```
+    - 
+    ```bash
+    ssh -i key-pair.pem ubuntu@54.91.24.127 -p 9759
+    ```
+
+    - 
+    ```plaintext
+    By following these steps, you'll have configured SSH to listen on a non- standard port (9759) on your cloud Server. However, remember that changing the SSH port is just one layer of security, and you should implement other security measures in conjunction with this change.
+    ```
+
+### 5. FAIL TO BAN(fail2ban) Configuration
+    
+- Here's how to install and configure fail2ban on your cloud server to protect against SSH brute-force attacks:
+
+- **Update and Install Fail2ban**
+
+- 
+```bash
+sudo apt update
+sudo apt install fail2ban
+sudo systemctl status fail2ban.service
+sudo systemctl enable fail2ban.service
+sudo systemctl start fail2ban.service
+```
+- This command should show that the fail2ban service is running (active).
+
+- **Configure Fail2ban for SSH (Optional):**
+
+    - 
+    ```plaintext
+    By default, fail2ban comes with a pre-configured jail for SSH named sshd. However, you might want to review and potentially adjust some settings:
+    ```
+    - 
+    ```bash
+    sudo nano /etc/fail2ban/jail.d/defaults-debian.conf
+    ```
+
+    - Enter the following entries manually
+
+    ```plaintext
+    [sshd]
+    enabled = true
+    maxretry = 3
+    bantime = 300
+    ```
+
+    ```plaintext
+    If the sshd.conf file doesn't exist and if you want the ssh configuration would be handled separately use the following command and create one.
+    ```
+
+    ```bash
+    sudo touch /etc/fail2ban/jail.d/sshd.conf
+    ```
+    - `maxretry:` This defines the number of failed login attempts before blocking the IP (in this scenario: 3).
+    - `bantime:` This sets the duration (in seconds) that an IP address is blocked after exceeding the maxretrylimit (in this scenario: 300 → 5 minutes). 
+    - Edit the values based on your needs. 
+    - `Save and close` the file (Ctrl+O, then Ctrl+X).
+    
+    - **Restart Fail2ban**
+
+        - 
+        ```bash
+        sudo systemctl restart fail2ban.service
+        ```
+    -  **Testing Fail2ban**
+
+        - Warning: Perform this test from a separate machine or with caution to avoid accidentally locking yourself out.
+
+        - From another machine, attempt SSH login to your cloud server with an incorrect password exceeding the maxretry limit set in the sshd.conf file 
+        (e.g., 3 times). If fail2ban is working correctly, you should be unable to connect after exceeding the allowed attempts.
+
+
+        - You can check the fail2ban logs for details:
+
+            - 
+            ```bash
+            sudo fail2ban-client status sshd
+            sudo nano /var/log/auth.log
+            ```
+- 
+```plaintext
+Fail2ban also offers jails for other services like FTP, Apache, etc. You can find configuration files for these in the /etc/fail2ban/jail.d/ directory.
+Consider enabling email notifications from fail2ban to alert you about blocked IP addresses. Refer to the fail2ban documentation for details on setting this up. By implementing these steps, you'll have fail2ban actively monitoring your SSH login attempts and blocking suspicious activity, helping to secure your cloud server.
+```
+
+ ### 6. IP TABLES
