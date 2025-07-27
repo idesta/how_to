@@ -10,6 +10,8 @@ This guide explains how to configure a Site-to-Site IPSec VPN between two EC2 in
 
     - In order to access them via `SSH` you have to configure key-pair and download it to your local machine.
 
+    - For production workloads you may consider allocating Elastic IPs.
+
 
 ## Configuration Details
 
