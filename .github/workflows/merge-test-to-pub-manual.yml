@@ -1,0 +1,37 @@
+# .github/workflows/merge-test-to-pub-manual.yml
+name: Merge test to pub (Manual Trigger)
+
+on:
+  workflow_dispatch: # This allows you to manually trigger the workflow from GitHub UI
+    inputs:
+      reason:
+        description: 'Reason for merging to pub'
+        required: false
+        default: 'Manual deployment'
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Merge test into pub
+        run: |
+          git checkout pub
+          git pull origin pub
+          git merge test --no-ff -m "Merge test into pub - ${{ github.event.inputs.reason }} [skip ci]"
+          git push origin pub
+
+      - name: Handle merge conflicts (manual intervention required)
+        if: failure()
+        run: |
+          echo "::error::Merge conflict detected when merging test into pub. Please resolve manually."
+          exit 1
