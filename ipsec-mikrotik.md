@@ -16,7 +16,7 @@ add address=10.208.71.236/32 local-address=10.131.113.116 name=ET-peer1-kekros01
 ```
 add peer=ET-peer1-kekros01 [secret="preshared key"]
 
-You have to use the GUI to insert the preshared-key(secret)
+You have to use the GUI to insert the preshared-key/secret
 ```
 
 > **/ip ipsec proposal**
