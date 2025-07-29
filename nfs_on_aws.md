@@ -1,4 +1,4 @@
-# NFS on AWS EC2 (ubuntu 24.04)
+# NFS on AWS EC2 (ubuntu 24.04 free tier)
 
 ### 1. Create and Launch 3 EC2 instances
 - 1 EC2 Instance for nfs-server
