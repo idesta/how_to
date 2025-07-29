@@ -16,18 +16,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          #fetch-depth: 0
+          ref: pub # Checkout the 'pub' branch first
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Git
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
 
+      - name: Fetch test branch
+        run: |
+          git fetch origin test # Fetch the latest changes from the 'test' branch
+
+
       - name: Merge test into pub
         run: |
           git checkout pub
           git pull origin pub
-          git merge test --no-ff -m "Merge test into pub - ${{ github.event.inputs.reason }} [skip ci]"
+          git merge origin/test --no-ff -m "Merge test into pub - ${{ github.event.inputs.reason }} [skip ci]"
           git push origin pub
 
       - name: Handle merge conflicts (manual intervention required)
