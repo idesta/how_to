@@ -35,7 +35,7 @@
 
     * check whether it has a file system or not
 
-        > type **sudo file -s /dev/xvdz**
+        > type **sudo file -s dev/xvdz**
 
         ```
         if the output is [/dev/xvdz: data] there is no file system on it
