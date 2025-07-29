@@ -1,4 +1,4 @@
-name: Manual Merge Staging to Production
+name: Manual Merge main to Production
 
 on:
   workflow_dispatch:
@@ -24,14 +24,14 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
 
-      - name: Fetch staging branch
-        run: git fetch origin staging
+      - name: Fetch main branch
+        run: git fetch origin main
 
-      - name: Merge staging into production
+      - name: Merge main into production
         run: |
           git checkout production
           git pull origin production
-          git merge origin/staging --no-ff -m "Merge staging to production - ${{ github.event.inputs.reason }} [skip ci]"
+          git merge origin/main --no-ff -m "Merge main to production - ${{ github.event.inputs.reason }} [skip ci]"
           git push origin production
 
       - name: Handle merge conflict
